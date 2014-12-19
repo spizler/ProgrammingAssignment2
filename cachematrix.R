@@ -33,16 +33,16 @@ makeCacheMatrix <- function(x = matrix()) {
 ## changed), then cachesolve retrieves the inverse from the cache
 
 cacheSolve <- function(x, ...) {
-    ## retrieve existing inversematrix
+    ## retrieve existing inversematrix (may be NULL)
     invx <- x$getinv()
     
-    ## if invx exists, retrieve invmatrix
+    ## if invx is not NULL, return invmatrix
     if(!is.null(invx)) {
         message("getting cached data")
         return(invx)
     }
     
-    ## if invx doesn't exist, calculate and set it to x
+    ## if invx does not exist, calculate invx and set invx
     data <- x$get() #get matrix, x
     invx <- solve(data, ...)
     x$setinv(invx)
