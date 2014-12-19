@@ -1,16 +1,51 @@
-## test commit2
-## Put comments here that give an overall description of what your
-## functions do
+## makeCacheMatrix creates a Cache Matrix object and allows other functions to 
+##  get and set the matrix and it's inverse
+## cacheSolve takes in a Cache Matrix object, and if the inverse matrix is null,
+##  the inverse matrix is solved and set
 
-## Write a short comment describing this function
-
+## Creates a special "Cache Matrix" object that can cache its inverse. The two 
+## variables stored in this object will be "x" and "invx"
 makeCacheMatrix <- function(x = matrix()) {
-
+    ## initialize the inverse matrix
+    invx <- NULL
+    
+    ## set a new matrix, inverse not yet calculated
+    set <- function(y) {
+        x <<- y
+        inx <<- NULL
+    }
+    
+    ## get matrix
+    get <- function() x
+    
+    ## set inverse matrix
+    setinv <- function(inversematrix) invx <<- inversematrix
+    
+    ## get invsese matrix
+    getinv <- function() invx
+    
+    list(set = set, get = get, setinv = setinv, getinv = getinv)
 }
 
 
-## Write a short comment describing this function
+## Computes the inverse of the special "matrix" returned by makeCacheMatrix 
+## above. If the inverse has already been calculated (and the matrix has not 
+## changed), then cachesolve retrieves the inverse from the cache
 
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+    ## retrieve existing inversematrix
+    invx <- x$getinv()
+    
+    ## if invx exists, retrieve invmatrix
+    if(!is.null(invx)) {
+        message("getting cached data")
+        return(invx)
+    }
+    
+    ## if invx doesn't exist, calculate and set it to x
+    data <- x$get() #get matrix, x
+    invx <- solve(data, ...)
+    x$setinv(invx)
+    invx
 }
+
